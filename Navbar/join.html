@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .image-container {
+            position: relative;
+        }
+
+        .overlay-text {
+            position: absolute;
+            top: 70%;
+            left: 27%;
+            transform: translate(-50%, -50%);
+            color: black;
+            text-align: center;
+        }
+
+        .overlay-text p {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0;
+            padding: 0;
+        }
+
+        .overlay-text span {
+            font-size: 1rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Responsive Font Sizes */
+        @media (max-width: 768px) {
+            .overlay-text p {
+                font-size: 1.5rem;
+            }
+
+            .overlay-text span {
+                font-size: 0.8rem;
+            }
+        }
+
+
+        .custom-div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card-container {
+            margin-top: 10px;
+        }
+
+        .node {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .card {
+            width: 100%;
+            background: white;
+            border: 0;
+            z-index: 1; /* Ensure the card stays on top of the node */
+            margin-top: 10px;
+        }
+
+        .location span {
+            border-bottom: 2px solid;
+        }
+
+        /* Responsive styles using media queries */
+        @media (min-width: 576px) {
+            /* Small devices (576px and up) */
+            .custom-div {
+                padding: 30px;
+            }
+
+            .ellipsis-container {
+                margin-right: 20px;
+            }
+
+            .card {
+                margin-left: 0;
+            }
+        }
+
+        @media (min-width: 768px) {
+            /* Medium devices (768px and up) */
+            .card-container {
+                display: flex;
+            }
+
+            .card {
+                margin-left: 20px;
+            }
+        }
+
+        @media (min-width: 992px) {
+            /* Large devices (992px and up) */
+            .card {
+                width: 40rem;
+                margin-left: 0; /* Adjust margin for larger screens */
+            }
+        }
+
+        @media (min-width: 1200px) {
+            /* Extra large devices (1200px and up) */
+            /* Add additional styles as needed */
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .circle-container {
+            width: 70px; /* Adjust the size as needed */
+            height: 70px; /* Adjust the size as needed */
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 10px; /* Adjust the spacing between the image and text */
+        }
+
+        .circle-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .profile-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-details p {
+            margin: 0;
+        }
+
+        .regular-font {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .text-container {
+            flex: 1; /* Takes up remaining space */
+        }
+
+        .ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .ellipsis-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .ellipsis-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .ellipsis-dropdown a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .ellipsis-container:hover .ellipsis-dropdown {
+            display: block;
+        }
+        .custom-div {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .written-note {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #f8f9fa;
+            padding: 5px 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-weight: bold;
+            border-bottom: 2px solid;
+        }
+
+        .card-container {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Add your existing styles here */
+
+        @media (max-width: 768px) {
+            .written-note {
+                font-size: 14px;
+                display: none; /* Hide the note on smaller screens */
+            }
+        }
+        
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <span style="color: green; margin-left: 15px; font-weight: bold ; font-size: 20px;">ATG.<span
+                    style="color: black ;">WORLD</span></span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <form class="d-flex mx-auto position-relative" role="search">
+                    <div class="input-group">
+                        <input class="form-control rounded pl-4" type="search"
+                            placeholder="&#128300; Search for your favorite group in ATG" aria-label="Search"
+                            style="max-width: 350px; width: 1000px;">
+
+                    </div>
+                </form>
+                <span>Create Account.</span>
+                <a href="other-page.html">It's free!</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="image-container">
+        <img src="hea.jpg" alt="Full Length Image" style="width: 100%; height: auto;">
+        <div class="overlay-text">
+            <p style="margin: 0%; padding: 0;">Computer Engineering</p>
+            <span style="margin: 0%; padding: 0;">142,756 Computer Engineers follow this</span>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg bg-white" style="margin-top: 30px; margin-left: 20px; margin-right: 50px;">
+        <div class="container-fluid">
+            <a class="navbar-brand" style='margin-left: 15px;'>All posts (32)</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Article</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Event</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Education</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Job</a>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Write a post
+                        </button> 
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Separated link</a>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" type="submit" style="margin-left: 4px; margin-right: 15px;">Join
+                        group</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="custom-div">
+        <div class="written-note">
+            <img src="icons8-location-48.png" style="margin-left: 0px; width: 10%;">
+            <span style="border-bottom: 2px solid;">Noida, India</span>
+            <img src="pen.png" alt="Pen Icon" style="width: 16px; height: 16px; margin-left: 50px;">
+            <p style="font-size: 12px; font-weight: 300; margin: 0; padding: 0;">Your location will help us serve better and</p>
+            <p style="font-size: 12px; font-weight: 300; margin: 0; padding: 0;">extend a personalized experience</p>
+        </div>
+        
+        <!-- Card 1 -->
+        <div class="card border-0 card-container">
+            <img src="mai.jpg" class="card-img-top img-fluid" alt="..." style="width: 100%;">
+            <div class="card-body">
+                <div style="display: flex; align-items: center;">
+                    <img src="writing.png" alt="Meetup Image"
+                        style="width: 4%; max-width: 300px; height: auto; margin-right: 10px; margin-top: -10px;">
+                    <h5 class="card-title" style="font-weight: bold;">Article</h5>
+                </div>
+                <div class="regular-font">
+                    <div class="text-container">
+                        <p style="font-weight: bold;font-size: 20px;">Tax benefits for Investment under the National
+                            Pension Scheme launched by the Government</p>
+                    </div>
+                    <div class="ellipsis-container">
+                        <div class="ellipsis-dropdown">
+                            <a href="#">Edit</a>
+                            <a href="#">Report</a>
+                            <a href="#">Option 3</a>
+                        </div>
+                        <div class="ellipsis" style="font-weight: bold; font-size: 20px;">...</div>
+                    </div>
+                </div>
+                <p class="card-text" style="font-size: 19px;">Some quick example text to build on the card title and make
+                    up ...</p>
+                <div class="profile-container">
+                    <div class="circle-container">
+                        <!-- Replace the placeholder image URL -->
+                        <img src="hea.jpg" alt="Circle Image">
+                    </div>
+                    <div class="profile-details">
+                        <p style="font-weight: bold; font-size: 20px; margin-top: 10px;">Sarah West</p>
+                    </div>
+                    <div>
+                        <p style="font-size: 14px; margin-top: 10px;"> <span
+                                style="margin-top: 17px; font-size: 18px; margin-right: 5px; margin-left: 150px;">👁</span>1.4K views<i
+                                style="font-size:24px; margin-left: 10px; margin-top: 20px;" class="fa">&#xf1e0;</i></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="custom-div">
+        <!-- Card 1 -->
+        <div class="card border-0 card-container">
+            <img src="mai.jpg" class="card-img-top img-fluid" alt="..." style="width: 100%;">
+            <div class="card-body">
+                <h5 class="card-title" style="font-weight: bold;">Education</h5>
+                <div class="regular-font">
+                    <div class="text-container">
+                        <p style="font-weight: bold;font-size: 20px;">Tax benefits for Investment under the National
+                            Pension Scheme launched by the Government</p>
+                    </div>
+                    <div class="ellipsis-container">
+                        <div class="ellipsis-dropdown">
+                            <a href="#">Edit</a>
+                            <a href="#">Report</a>
+                            <a href="#">Option 3</a>
+                        </div>
+                        <div class="ellipsis" style="font-weight: bold; font-size: 20px;">...</div>
+                    </div>
+                </div>
+                <p class="card-text" style="font-size: 19px;">Some quick example text to build on the card title and make
+                    up ...</p>
+                <div class="profile-container">
+                    <div class="circle-container">
+                        <!-- Replace the placeholder image URL -->
+                        <img src="hea.jpg" alt="Circle Image">
+                    </div>
+                    <div class="profile-details">
+                        <p style="font-weight: bold; font-size: 20px; margin-top: 10px;">Sarah West</p>
+                    </div>
+                    <div>
+                        <p style="font-size: 14px; margin-top: 10px;"> <span
+                                style="margin-top: 17px; font-size: 18px; margin-right: 150px;">👁</span>1.4K views<i
+                                style="font-size:24px; margin-left: 10px; margin-top: 20px;" class="fa">&#xf1e0;</i></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card border-0 card-container">
+            <img src="mai.jpg" class="card-img-top img-fluid" alt="..." style="width: 100%;">
+            <div class="card-body">
+                <div style="display: flex; align-items: center;">
+                    <img src="calendar.png" alt="Meetup Image"
+                        style="width: 4%; max-width: 300px; height: auto; margin-right: 10px; margin-top: -10px;">
+                    <h5 class="card-title" style="font-weight: bold;">Meetup</h5>
+                </div>
+                <div class="regular-font">
+                    <div class="text-container">
+                        <p style="font-weight: bold;font-size: 20px;">Finance & Investment Elite Social Mixer
+                            @Lujiazui</p>
+                    </div>
+                    <div class="ellipsis-container">
+                        <div class="ellipsis-dropdown">
+                            <a href="#">Edit</a>
+                            <a href="#">Report</a>
+                            <a href="#">Option 3</a>
+                        </div>
+                        <div class="ellipsis" style="font-weight: bold; font-size: 20px;">...</div>
+                    </div>
+                </div>
+                <p class="card-text" style="font-size: 15px; font-weight: bold;"><i style="font-size:24px"
+                        class="fa">&#xf073;</i>Fri,12 Oct 2108<img src="icons8-location-48.png"
+                        style="margin-left: 90px; width: 5%;"> <span>Ahmedabad, India</span></p>
+                <button
+                    style="background-color: white; color: rgb(255, 94, 0); border: 1px solid black; padding: 5px 220px; margin-left: 20px; font-weight: bold; border-radius: 20px;">
+                    Visit Website
+                </button>
+                <div class="profile-container">
+                    <div class="circle-container">
+                        <!-- Replace the placeholder image URL -->
+                        <img src="hea.jpg" alt="Circle Image">
+                    </div>
+                    <div class="profile-details">
+                        <p style="font-weight: bold; font-size: 20px; margin-top: 10px;">Ronal Jones</p>
+                    </div>
+                    <div>
+                        <p style="font-size: 14px; margin-top: 10px;"> <span
+                                style="margin-top: 17px; font-size: 18px; margin-right: 150px;">👁</span>1.4K views<i
+                                style="font-size:24px; margin-left: 10px; margin-top: 20px;" class="fa">&#xf1e0;</i></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+
+<div class="custom-div">
+    <div class="card border-0 card-container">
+        <div class="card-body">
+            <div style="display: flex; align-items: center;">
+                <img src="briefcase (1).png" alt="Meetup Image"
+                    style="width: 4%; max-width: 300px; height: auto; margin-right: 10px; margin-top: -10px;">
+                <h5 class="card-title" style="font-weight: bold;">Job</h5>
+            </div>
+            <div class="regular-font">
+                <div class="text-container">
+                    <p style="font-weight: bold;font-size: 20px;">Software Developer</p>
+                </div>
+                <div class="ellipsis-container">
+                    <div class="ellipsis" style="font-weight: bold; font-size: 20px;">...</div>
+                    <div class="ellipsis-dropdown">
+                        <a href="#">Edit</a>
+                        <a href="#">Report</a>
+                        <a href="#">Option 3</a>
+                    </div>
+                </div>
+            </div>
+            <p class="card-text" style="font-size: 15px; font-weight: bold;"><img src="briefcase.png"
+                    style=" width: 4%; margin-right: 5px; margin-top: -4px;">Innovaccer Analytics private Ltd.
+                <img src="icons8-location-48.png" style="margin-left: 90px; width: 5%;"> <span>Noida,India</span></p>
+            <button style="background-color: white; color: rgb(78, 235, 78); border: 1px solid black; padding: 5px 220px; margin-left: 10px; font-weight: bold; border-radius: 20px;">
+                Apply on Timesjobs
+            </button>
+            <div class="profile-container">
+                <div class="circle-container">
+                    <!-- Replace the placeholder image URL -->
+                    <img src="hea.jpg" alt="Circle Image">
+                </div>
+                <div class="profile-details">
+                    <p style="font-weight: bold; font-size: 20px; margin-top: 10px;">Ronal Jones</p>
+                </div>
+                <div >
+                    <p style=" font-size: 14px ; margin-top: 10px; margin-left: 150px;"> <span style=" margin-top: 17px;font-size: 18px; margin-right: 5px;">👁</span>1.4K views<i style="font-size:24px; margin-left: 10px; margin-top: 20px;" class="fa">&#xf1e0;</i></p>
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+   
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
